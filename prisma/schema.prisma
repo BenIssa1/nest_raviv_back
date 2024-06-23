@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 Int              @id @default(autoincrement())
+  name               String           @db.VarChar(65)
+  email              String           @unique @db.VarChar(255)
+  password           String           @db.VarChar(255)
+  role               String           @default("User")
+  createdAt          DateTime         @default(now())
+  updateAt           DateTime         @updatedAt()
+  resetPasswordToken String?          @db.VarChar(65)
+  storyteller        Storyteller?
+  Framer             Framer?
+  Student            Student?
+  storyHistories     StoryHistories[] @relation("user_story_histories")
+}
+
+model Storyteller {
+  id              Int     @id @default(autoincrement())
+  firstName       String  @db.VarChar(65)
+  lastName        String  @db.VarChar(65)
+  phone           String  @db.VarChar(255)
+  experience      String? @db.VarChar(255)
+  cvUrl           String? @db.VarChar(255)
+  address         String? @db.VarChar(255)
+  fieldOfActivity String? @db.VarChar(255)
+  isVerified      Boolean @default(false)
+  userId          Int     @unique
+  user            User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tale            Tale[]  @relation("storyteller_tales")
+}
+
+model Framer {
+  id           Int       @id @default(autoincrement())
+  firstName    String    @db.VarChar(65)
+  lastName     String    @db.VarChar(65)
+  phone        String?   @db.VarChar(255)
+  address      String?   @db.VarChar(255)
+  country      String?   @db.VarChar(255)
+  city         String?   @db.VarChar(255)
+  establisment String?   @db.VarChar(255)
+  typeFramer   String?   @db.VarChar(255)
+  userId       Int       @unique
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Student      Student[] @relation("framer_students")
+}
+
+model Student {
+  id           Int    @id @default(autoincrement())
+  firstName    String @db.VarChar(65)
+  lastName     String @db.VarChar(65)
+  classroom    String @db.VarChar(255)
+  establisment String @db.VarChar(255)
+  userId       Int    @unique
+  framerId     Int
+  user         User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Framer       Framer @relation("framer_students", fields: [framerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Tale {
+  id              Int              @id @default(autoincrement())
+  title           String           @db.VarChar(255)
+  description     String
+  videoUrl        String           @db.VarChar(255)
+  typeTale        String           @db.VarChar(255)
+  language        String           @db.VarChar(255)
+  imageBackground String           @db.VarChar(255)
+  createdAt       DateTime         @default(now())
+  storytellerId   Int
+  storyteller     Storyteller      @relation("storyteller_tales", fields: [storytellerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  question        Question[]       @relation("tale_questions")
+  storyHistories  StoryHistories[] @relation("tale_story_histories")
+}
+
+model Question {
+  id       Int        @id @default(autoincrement())
+  label    String
+  taleId   Int
+  Tale     Tale       @relation("tale_questions", fields: [taleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  response Response[] @relation("question_responses")
+}
+
+model Response {
+  id         Int      @id @default(autoincrement())
+  label      String
+  result     Boolean
+  questionId Int
+  question   Question @relation("question_responses", fields: [questionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model StoryHistories {
+  id         Int      @id @default(autoincrement())
+  note       Int
+  percentage Int
+  resolution String?
+  createdAt  DateTime @default(now())
+  taleId     Int
+  userId     Int
+  Tale       Tale     @relation("tale_story_histories", fields: [taleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user       User     @relation("user_story_histories", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
