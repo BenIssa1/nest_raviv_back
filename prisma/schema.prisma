@@ -22,6 +22,7 @@ model User {
   createdAt          DateTime         @default(now())
   updateAt           DateTime         @updatedAt()
   resetPasswordToken String?          @db.VarChar(65)
+  profileImage       String?          @db.VarChar(255)
   storyteller        Storyteller?
   Framer             Framer?
   Student            Student?

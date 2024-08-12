@@ -9,4 +9,7 @@ export class UpdateAccountDto {
   @IsNotEmpty()
   @IsEmail()
   readonly email: string;
+
+  @IsOptional()
+  readonly profileImage: string;
 }

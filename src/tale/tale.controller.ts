@@ -16,13 +16,12 @@ export class TaleController {
   ) { }
 
   @Get('list')
-  @Roles(['User'])
   @UseGuards(AuthGuard('jwt'), AuthorizationGuard)
   getAllDemand() {
     return this.taleService.getAll();
   }
 
-  @Roles(['User'])
+  @Roles(['Storyteller'])
   @UseGuards(AuthGuard('jwt'), AuthorizationGuard)
   @Post("register") 
   registerTale(
@@ -33,7 +32,7 @@ export class TaleController {
     return this.taleService.registerTale(registerTaleDto, userId);
   }
 
-  @Roles(['User'])
+  @Roles(['Storyteller'])
   @UseGuards(AuthGuard('jwt'), AuthorizationGuard)
   @Put('update/:id')
   update(
@@ -43,14 +42,13 @@ export class TaleController {
     return this.taleService.update(taleId, updateTaleDto);
   }
 
-  @Roles(['User'])
   @UseGuards(AuthGuard('jwt'), AuthorizationGuard)
   @Get('single/:id')
   getSingle(@Param('id', ParseIntPipe) taleId: number) {
     return this.taleService.getSingle(taleId);
   }
 
-  @Roles(['User'])
+  @Roles(['Storyteller'])
   @UseGuards(AuthGuard('jwt'), AuthorizationGuard)
   @Delete('delete/:id')
   delete(@Param('id', ParseIntPipe) taleId: number) {
