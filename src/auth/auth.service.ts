@@ -22,22 +22,24 @@ export class AuthService {
   ) { }
 
   async signup(signupDto: SignupDto) {
-    const { email, password, name, role } = signupDto;
+    const { email, password, name, role, pseudo } = signupDto;
     // ** Vérifier si l'utilisateur est déja inscrit
     const user = await this.prismaService.user.findUnique({ where: { email } });
     if (user) throw new ConflictException('User already exists');
     // ** Hasher le mot de passe
     const hash = await bcrypt.hash(password, 10);
     // ** Enregistrer l'utilisateur dans la base de données
-    let userCreated = await this.prismaService.user.create({ data: { email, name, password: hash, resetPasswordToken: null, role } })
+    let userCreated = await this.prismaService.user.create({ data: { email, name, password: hash, resetPasswordToken: null, role, pseudo } })
     // ** Retourner une réponse de succès
     return { data: 'User successfully created', user: userCreated }
   }
 
   async signin(signinDto: SigninDto) {
-    const { email, password } = signinDto;
+    const { username, password } = signinDto;
     // ** Vérifier si l'utilisateur existe
-    const user = await this.prismaService.user.findUnique({ where: { email } });
+    const user = await this.prismaService.user.findFirst({
+      where: {OR: [{pseudo: username},{email: username}]}
+    });
     if (!user) throw new NotFoundException('User not found');
     // ** Comparer le mot de passe
     const match = await bcrypt.compare(password, user.password);

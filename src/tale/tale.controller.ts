@@ -16,7 +16,7 @@ export class TaleController {
   ) { }
 
   @Get('list')
-  @UseGuards(AuthGuard('jwt'), AuthorizationGuard)
+  @UseGuards(AuthGuard('jwt'))
   getAllDemand() {
     return this.taleService.getAll();
   }

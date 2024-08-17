@@ -16,7 +16,8 @@ datasource db {
 model User {
   id                 Int              @id @default(autoincrement())
   name               String           @db.VarChar(65)
-  email              String           @unique @db.VarChar(255)
+  pseudo             String?          @unique @db.VarChar(255)
+  email              String?          @unique @db.VarChar(255)
   password           String           @db.VarChar(255)
   role               String           @default("User")
   createdAt          DateTime         @default(now())
@@ -27,6 +28,7 @@ model User {
   Framer             Framer?
   Student            Student?
   storyHistories     StoryHistories[] @relation("user_story_histories")
+  Comment            Comment[]        @relation("user_comments")
 }
 
 model Storyteller {
@@ -84,6 +86,7 @@ model Tale {
   storyteller     Storyteller      @relation("storyteller_tales", fields: [storytellerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   question        Question[]       @relation("tale_questions")
   storyHistories  StoryHistories[] @relation("tale_story_histories")
+  comments        Comment[]        @relation("tale_comments")
 }
 
 model Question {
@@ -112,4 +115,15 @@ model StoryHistories {
   userId     Int
   Tale       Tale     @relation("tale_story_histories", fields: [taleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   user       User     @relation("user_story_histories", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  message   String
+  taleId    Int
+  userId    Int      
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt()
+  Tale      Tale     @relation("tale_comments", fields: [taleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user      User     @relation("user_comments", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }

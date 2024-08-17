@@ -104,6 +104,7 @@ export class FramerService {
     let signup = await this.authService.signup({
       email, name: lastName,
       password,
+      pseudo: null,
       role: typeFramer == 'Teacher' ? 'Teacher' : 'Parent'
     });
     if (signup.data) {

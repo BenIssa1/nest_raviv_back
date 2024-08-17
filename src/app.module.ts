@@ -8,8 +8,9 @@ import { FramerModule } from './framer/framer.module';
 import { StudentModule } from './student/student.module';
 import { TaleModule } from './tale/tale.module';
 import { StoryHistoriesModule } from './story-histories/story-histories.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), PrismaModule, AuthModule, MailerModule, StorytellerModule, FramerModule, StudentModule, TaleModule, StoryHistoriesModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), PrismaModule, AuthModule, MailerModule, StorytellerModule, FramerModule, StudentModule, TaleModule, StoryHistoriesModule, CommentModule],
 })
 export class AppModule {}

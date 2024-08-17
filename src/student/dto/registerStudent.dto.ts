@@ -11,6 +11,9 @@ export class RegisterStudentDto {
   readonly lastName: string;
 
   @IsNotEmpty()
+  readonly pseudo: string;
+
+  @IsNotEmpty()
   readonly classroom: string;
 
   @IsNotEmpty()

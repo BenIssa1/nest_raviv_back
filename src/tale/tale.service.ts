@@ -24,6 +24,16 @@ export class TaleService {
               }
             }
           }
+        }, comments: {
+          select: {
+            id: true,
+            message: true,
+            user: {
+              select: {
+                name: true,
+              }
+            }
+          }
         }
       }
     });
