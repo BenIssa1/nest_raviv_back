@@ -42,7 +42,7 @@ export class TaleController {
     return this.taleService.update(taleId, updateTaleDto);
   }
 
-  @UseGuards(AuthGuard('jwt'), AuthorizationGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Get('single/:id')
   getSingle(@Param('id', ParseIntPipe) taleId: number) {
     return this.taleService.getSingle(taleId);
