@@ -23,7 +23,11 @@ model User {
   createdAt          DateTime         @default(now())
   updateAt           DateTime         @updatedAt()
   resetPasswordToken String?          @db.VarChar(65)
+  otpToken           String?          @db.VarChar(255)
+  otpExpire          DateTime?
   profileImage       String?          @db.VarChar(255)
+  phone              String?          @db.VarChar(255)
+  isVerified         Boolean          @default(false)
   storyteller        Storyteller?
   Framer             Framer?
   Student            Student?
@@ -121,7 +125,7 @@ model Comment {
   id        Int      @id @default(autoincrement())
   message   String
   taleId    Int
-  userId    Int      
+  userId    Int
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt()
   Tale      Tale     @relation("tale_comments", fields: [taleId], references: [id], onDelete: Cascade, onUpdate: Cascade)

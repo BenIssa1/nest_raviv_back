@@ -44,12 +44,12 @@ export class StudentService {
     // ** Vérifier si l'utilisateur est déja inscrit
     const user = await this.prismaService.user.findUnique({ where: { pseudo } });
     if (user) throw new ConflictException('Pseudo already exists');
-    console.log(user)
     let signup = await this.authService.signup({
       email: firstName + lastName + randomNumber + "@gmail.com",
       name: lastName,
       password,
       pseudo,
+      phone: null,
       role: 'Student'
     });
     if (signup.data) {

@@ -10,6 +10,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/decorators/roles.decorator';
 import { AuthorizationGuard } from 'src/guards/authorization.guard';
 import { ApiTags } from '@nestjs/swagger';
+import { VerifiedOtpDto } from './dto/verifiedOtp.dto';
 
 @ApiTags('Authentification')
 @Controller('user')
@@ -24,6 +25,14 @@ export class AuthController {
   @Post("signin")
   signin(@Body() signinDto: SigninDto) {
     return this.authService.signin(signinDto);
+  }
+
+  @Patch('verified-otp/:id')
+  verifiedOtp(
+    @Param('id', ParseIntPipe) userId: number,
+    @Body() verifiedOtpDto: VerifiedOtpDto,
+  ) {
+    return this.authService.verifiedOtp(userId, verifiedOtpDto);
   }
 
   @Post("reset-password")

@@ -105,6 +105,7 @@ export class FramerService {
       email, name: lastName,
       password,
       pseudo: null,
+      phone: null,
       role: typeFramer == 'Teacher' ? 'Teacher' : 'Parent'
     });
     if (signup.data) {

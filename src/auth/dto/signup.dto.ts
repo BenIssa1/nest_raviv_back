@@ -11,6 +11,9 @@ export class SignupDto {
   @IsOptional()
   readonly pseudo: string;
 
+  @IsOptional()
+  readonly phone: string;
+
   @IsNotEmpty()
   readonly password: string;
 
